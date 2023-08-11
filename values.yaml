@@ -1,0 +1,15 @@
+node:
+  name: nodejs
+  namespace: node
+  image: 814047659931.dkr.ecr.eu-central-1.amazonaws.com/wsd-test-repo:latest
+  resources:
+    limits:
+      cpu: 100m
+      memory: 200Mi
+    requests:
+      cpu: 100m
+      memory: 200Mi
+
+service:
+  name: node-service
+  type: LoadBalancer

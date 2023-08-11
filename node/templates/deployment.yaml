@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Values.node.name }}
+  name: {{ .Values.node.name }}
+  namespace: {{ .Values.node.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.node.name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.node.name }}
+    spec:
+      containers:
+      - image: {{ .Values.node.image }}
+        imagePullPolicy: IfNotPresent
+        name: {{ .Values.node.name }}
+        ports:
+        - containerPort: {{ .Values.node.port | default "8080" }}
+          protocol: TCP
+        resources:
+          requests:
+            cpu: {{ .Values.node.resources.requests.cpu | quote }}
+            memory: {{ .Values.node.resources.requests.memory | quote }}
+          limits:
+            cpu: {{ .Values.node.resources.limits.cpu | quote }}
+            memory: {{ .Values.node.resources.limits.memory | quote}}
+      # imagePullSecrets:
+      #   - name: ecr-regisrty
