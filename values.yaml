@@ -1,7 +1,7 @@
 node:
   name: nodejs
   namespace: node
-  imagetag: latest
+  imagetag: 1.2.1
   resources:
     limits:
       cpu: 100m
