@@ -12,4 +12,4 @@ node:
 
 service:
   name: node-service
-  type: LoadBalancer
+  type: ClusterIP
