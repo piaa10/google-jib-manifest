@@ -1,7 +1,7 @@
 node:
   name: nodejs
   namespace: wsd
-  imagetag: $IMAGE_TAG-SNAPSHOT
+  imagetag: 1.0.0-SNAPSHOT
   resources:
     limits:
       cpu: 100m
