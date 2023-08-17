@@ -4,11 +4,13 @@ kind: Ingress
 metadata:
   namespace: {{ .Values.node.namespace }}
   name: {{ .Values.node.name }}
-  #annotations:
-  #  alb.ingress.kubernetes.io/scheme: internet-facing
-  #  alb.ingress.kubernetes.io/target-type: ip
+  {{- if eq .Values.ingress.ingressClass "alb "}}
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+  {{- end }}
 spec:
-  ingressClassName: alb
+  ingressClassName: {{ .Values.ingress.ingressClass }}
   rules:
     - http:
         paths:
