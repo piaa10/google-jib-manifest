@@ -1,0 +1,71 @@
+name: Schedule
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request_target:
+    types:
+      - closed
+  schedule:
+    - cron: '0 4 * * 6'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  staging:
+    name: Staging Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::814047659931:role/github-action
+          aws-region: eu-central-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: 'true'
+
+      - name: Get the image tag
+        id: tag
+        run: |
+          echo "::set-output name=image_tag::$(aws ecr describe-images --repository-name wsd-test-repo --query 'sort_by(imageDetails,& imagePushedAt)[*].imageTags[0]' --output yaml | tail -n 1 | awk -F'- ' '{print $2}')"
+
+      - name: Update image version with Manifest repo
+        run: |
+          yq e -i '.node.imagetag = "${{ steps.tag.outputs.image_tag }}"' values.yaml
+
+      - name: Commit files
+        run: |
+          git config --local user.email "github-actions@github.com"
+          git config --local user.name "github-actions"
+          git commit -a -m "Update image tag"
+          git push
+
+      - name: Generate Manifest
+        run: |
+          helm template node node -f values.yaml --output-dir manifest
+
+      - name: Update Kubeconfig
+        shell: bash
+        run: |
+          aws eks update-kubeconfig --name production-1 --region eu-central-1
+
+      - name: Configure kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.27.1'
+        id: install
+
+      - name: Apply Manifest
+        shell: bash
+        run: |
+          kubectl apply -f manifest/node/templates
