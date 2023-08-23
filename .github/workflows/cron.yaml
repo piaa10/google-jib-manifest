@@ -37,7 +37,7 @@ jobs:
       - name: Get the image tag
         id: tag
         run: |
-          echo "::set-output name=image_tag::$(aws ecr describe-images --repository-name wsd-test-repo --query 'sort_by(imageDetails,& imagePushedAt)[*].imageTags[0]' --output yaml | tail -n 1 | awk -F'- ' '{print $2}')"
+          echo "image_tag=$(aws ecr describe-images --repository-name wsd-test-repo --query 'sort_by(imageDetails,& imagePushedAt)[*].imageTags[0]' --output yaml | tail -n 1 | awk -F'- ' '{print $2}')" >> $GITHUB_OUTPUT
 
       - name: Update image version with Manifest repo
         run: |
