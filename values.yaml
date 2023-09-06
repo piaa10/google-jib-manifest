@@ -1,6 +1,6 @@
 node:
   name: nodejs
-  namespace: node
+  namespace: nginx
   imagetag: 1.0.0
   resources:
     limits:
