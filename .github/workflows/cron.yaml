@@ -3,7 +3,7 @@ name: Schedule
 on:
   push:
     branches:
-      - 'main'
+      - 'develop'
   pull_request_target:
     types:
       - closed
