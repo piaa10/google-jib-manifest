@@ -20,7 +20,7 @@ spec:
         app: {{ .Values.node.name }}
     spec:
       containers:
-      - image: 814047659931.dkr.ecr.eu-central-1.amazonaws.com/wsd-test-repo:{{ .Values.node.imagetag }}
+      - image: 677391411570.dkr.ecr.eu-west-2.amazonaws.com/staging/test/node:{{ .Values.node.imagetag }}
         imagePullPolicy: IfNotPresent
         name: {{ .Values.node.name }}
         ports:
