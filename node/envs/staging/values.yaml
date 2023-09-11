@@ -1,7 +1,7 @@
 node:
   name: nodejs
-  namespace: wsd
-  imagetag: 4.2.1-SNAPSHOT
+  namespace: nginx
+  imagetag: "29b7195"
   resources:
     limits:
       cpu: 100m

@@ -1,7 +1,7 @@
 node:
   name: nodejs
-  namespace: wsd
-  imagetag: 2.0.0-SNAPSHOT
+  namespace: nginx
+  imagetag: "29b7195"
   resources:
     limits:
       cpu: 100m
@@ -13,3 +13,6 @@ node:
 service:
   name: node-service
   type: ClusterIP
+#
+ingress:
+  ingressClass: alb
