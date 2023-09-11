@@ -1,7 +1,7 @@
 node:
   name: nodejs
   namespace: nginx
-  imagetag: ""
+  imagetag: "123"
   resources:
     limits:
       cpu: 100m
@@ -16,5 +16,3 @@ service:
 #
 ingress:
   ingressClass: alb
-image:
-  tag: ""
