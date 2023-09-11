@@ -1,7 +1,7 @@
 node:
   name: nodejs
   namespace: nginx
-  imagetag: "c5fc51e"
+  imagetag: "29b7195"
   resources:
     limits:
       cpu: 100m
