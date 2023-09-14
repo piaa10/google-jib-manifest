@@ -1,0 +1,21 @@
+deployment:
+  name: priiphub_app_ing
+  namespace: microsite
+  image: 
+  resources:
+      requests:
+        cpu: 0.5
+        memory: 1024Mi
+      limits:
+        cpu: 1.0
+        memory: 1024Mi
+  env:
+    - name: MICROSITE_NAME
+      value: ing
+    - name: POSTGRES_HOST
+      value: 10.136.8.31
+    - name: SERVICE_HOST
+      value: staging-app-ing.priiphub.com
+    - name: NODE_ENV
+      value: production
+  port: 6042

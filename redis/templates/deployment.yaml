@@ -1,0 +1,95 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.redis.name }}
+  namespace: {{ .Values.redis.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.redis.name }}
+  replicas: 1
+  minReadySeconds: 60
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.redis.name }}
+    spec:
+      containers:
+      - name: {{ .Values.redis.name }}
+        image: redis:7.0.5-bullseye
+        imagePullPolicy: Always
+        # https://raw.githubusercontent.com/redis/redis/6.0/redis.conf
+        args: 
+        - "--maxmemory"
+        - "750m"
+        - "--maxmemory-policy"
+        - "allkeys-lru"
+        - "--logfile"
+        - "/var/log/redis/redis.log"
+        #- "--syslog-enabled"
+        #- "yes"
+        resources:
+          requests:
+            cpu: 0.1
+            memory: 512Mi
+          limits:
+            cpu: 0.25
+            memory: 1024Mi
+        ports:
+        - containerPort: 6379
+        env:
+        volumeMounts:
+        - name: var-logs
+          mountPath: /var/log/redis
+      #   # https://hub.docker.com/r/oliver006/redis_exporter  docker pull oliver006/redis_exporter:v1.13.1-alpine
+      # - name: "binck-sp-redis-redis-exporter"
+      #   image: registry.fra1.internal/devops/redis-exporter-1.23.1:1.0.0
+      #   imagePullPolicy: Always
+      #   resources:
+      #     requests:
+      #       cpu: 0.05
+      #       memory: 167Mi
+      #     limits:
+      #       cpu: 0.1
+      #       memory: 167Mi
+      #   ports:
+      #   - containerPort: 9121
+      #   env:
+      #   stdin: true
+      #   terminationMessagePath: /dev/termination-log
+      #   terminationMessagePolicy: File
+      #   tty: true
+
+      # - name: "binck-sp-redis-redis-fluentd"
+      #   image: registry.fra1.internal/devops/fluentd:v1.14.3-debian-1.0-0
+      #   imagePullPolicy: Always
+      #   resources:
+      #     requests:
+      #       cpu: 0.1
+      #       memory: 256Mi
+      #     limits:
+      #       cpu: 0.1
+      #       memory: 256Mi
+      #   args:
+      #   - "-c"
+      #   - /etc/fluentd-config/fluentd.conf
+      #   volumeMounts:
+      #   - name: var-logs
+      #     mountPath: /var/log/redis
+      #   - name: config-volume
+      #     mountPath: /etc/fluentd-config/fluentd.conf
+      #     subPath: fluentd.conf
+      
+      # terminationGracePeriodSeconds: 90
+      volumes:
+      - name: var-logs
+        emptyDir: {}
+      # - name: config-volume
+      #   configMap:
+      #     name: "binck-sp-redis-fluentd-config"

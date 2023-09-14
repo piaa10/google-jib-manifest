@@ -1,0 +1,3 @@
+redis:
+  name: microsite-redis
+  namespace: microsite
