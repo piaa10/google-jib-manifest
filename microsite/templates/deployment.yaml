@@ -35,10 +35,10 @@ spec:
         {{- toYaml .Values.deployment.env | nindent 8 }}
         ports:
         - containerPort: {{ .Values.deployment.port }}
-        volumeMounts:
-        - name: 
-          mountPath: 
-      volumes:
-      - name: 
-        persistentVolumeClaim:
-          claimName: 
+      #   volumeMounts:
+      #   - name: 
+      #     mountPath: 
+      # volumes:
+      # - name: 
+      #   persistentVolumeClaim:
+      #     claimName: 

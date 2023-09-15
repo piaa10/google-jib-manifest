@@ -1,7 +1,8 @@
 deployment:
-  name: priiphub_app_ing
+  name: priiphub-app-ing
   namespace: microsite
-  image: 
+  replicaCount: 1
+  image: 677391411570.dkr.ecr.eu-west-2.amazonaws.com/wsd-microsite:1.0.0
   resources:
       requests:
         cpu: 0.5
@@ -18,4 +19,8 @@ deployment:
       value: staging-app-ing.priiphub.com
     - name: NODE_ENV
       value: production
+    - name: REDIS_HOST
+      value: microsite-redis
+    - name: HUB_LOG_PATH
+      value: /var/log
   port: 6042
